@@ -1,11 +1,20 @@
-"""
-Post request dont work on Djano apps on A2 hosted servers. This replacement 'passenger_wsgi.py'
-has fixed the issue for me. Works with Python 3.5 with Django 1.11, 2.0, 2.1, 2.2 and Python 3.7 with Django 3.0.
-"""
+import os
+import sys
 
-# Keep this empty
-SCRIPT_NAME = ''
+#########Accessing the App's Default WSGI##############
+import brasileiraoapi.wsgi
 
+application = brasileiraoapi.wsgi.application
+
+######## PASSENGER PATH INFO-FIX INITIALISATIONS#######
+cwd = os.getcwd()
+sys.path.append(cwd)
+#sys.path.append(os.getcwd())
+sys.path.append(cwd + '/brasileirao')  #You must add your project here
+# Set this to your root
+SCRIPT_NAME = os.getcwd()
+
+########  MIDDLEWARE CLASS TO FIX PASSENGER'S URI ISSUES #############
 class PassengerPathInfoFix(object):
     """
     Sets PATH_INFO from REQUEST_URI since Passenger doesn't provide it.
@@ -14,6 +23,7 @@ class PassengerPathInfoFix(object):
         self.app = app
 
     def __call__(self, environ, start_response):
+        #IF YOU ARE IN PYTHON 2.7 USE: from urllib import unquote
         from urllib.parse import unquote
         environ['SCRIPT_NAME'] = SCRIPT_NAME
 
@@ -23,7 +33,5 @@ class PassengerPathInfoFix(object):
         environ['PATH_INFO'] = request_uri[offset:].split('?', 1)[0]
         return self.app(environ, start_response)
 
-# Replace projectname with the name of the main folder containing wsgi.py and setting.py
-import brasileiraoapi.wsgi
-application = brasileiraoapi.wsgi.application
+###########the redirecting Middleware
 application = PassengerPathInfoFix(application)

@@ -4,4 +4,4 @@ GET http://localhost:8000/api/teams/
 GET http://localhost:8000/api/seasons/
 ###
 
-GET https://brasileirao-api-vgc.herokuapp.com/api/teams/
+GET https://glinn.com.br/api/teams/
