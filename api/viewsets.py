@@ -57,7 +57,7 @@ class SeasonsViewSet(APIView):
 class RoundsViewSet(APIView):
 
     def get(self, request):
-        qp = int(request.GET.get('rodada', 0))
+        qp = int(request.GET.get('rodada', 1))
         html = urlopen("https://www.cbf.com.br/futebol-brasileiro/competicoes/campeonato-brasileiro-serie-a")
         bs = BeautifulSoup(html, "html.parser")
 
