@@ -52,3 +52,33 @@ class SeasonsViewSet(APIView):
 
 
         return Response(obj)
+
+
+class RoundsViewSet(APIView):
+
+    def get(self, request):
+        qp = int(request.GET.get('rodada', 0))
+        html = urlopen("https://www.cbf.com.br/futebol-brasileiro/competicoes/campeonato-brasileiro-serie-a")
+        bs = BeautifulSoup(html, "html.parser")
+
+        linhas = bs.find_all('aside', {'class': 'aside-rodadas'})
+        rounds = linhas[0].findChildren('ul')
+        ronda = rounds[qp - 1].find_all('li')
+        obj = []
+
+        for r in ronda:
+            spans = r.findChildren('span')
+            divs = r.findChildren('div')[0].findChildren('div')
+            obj.append({
+                'home': {
+                    'nick': spans[1].text,
+                    'img': divs[1].img['src']
+                },
+                'away': {
+                    'nick': spans[2].text,
+                    'img': divs[2].img['src']
+                }
+            })
+
+
+        return Response(obj)

@@ -4,4 +4,8 @@ GET http://localhost:8000/api/teams/
 GET http://localhost:8000/api/seasons/
 ###
 
+GET http://localhost:8000/api/rounds/?rodada=3
+###
+
+
 GET https://glinn.com.br/api/teams/

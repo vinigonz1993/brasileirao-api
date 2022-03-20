@@ -3,7 +3,7 @@ from django.urls import include, path
 from rest_framework import routers
 
 from api.viewsets import (
-    TeamsViewSet, SeasonsViewSet
+    RoundsViewSet, TeamsViewSet, SeasonsViewSet
 )
 
 router = routers.DefaultRouter()
@@ -22,5 +22,9 @@ urlpatterns = [
     path(
         'seasons/',
         SeasonsViewSet.as_view()
+    ),
+    path(
+        'rounds/',
+        RoundsViewSet.as_view()
     )
 ]
