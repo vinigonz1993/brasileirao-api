@@ -21,8 +21,9 @@ class TeamsViewSet(APIView):
             filhas = l.findChildren('td')
             text = (filhas[0].text).replace('\n', '')
             pos = text.split('º')
+            name = pos[1].split(' -')[0]
             obj.append({
-                'name': pos[1].split(' -')[0],
+                'name': name.replace('0', ''),
                 'pos': pos[0],
                 'pts': filhas[1].text,
                 'v': filhas[1].text,
