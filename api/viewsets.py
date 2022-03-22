@@ -28,7 +28,8 @@ class TeamsViewSet(APIView):
                 'pts': filhas[1].text,
                 'v': filhas[1].text,
                 'e': filhas[2].text,
-                'd': filhas[3].text
+                'd': filhas[3].text,
+                'img': filhas[0].img['src']
             })
 
         return Response(obj)
