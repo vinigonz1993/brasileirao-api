@@ -67,16 +67,24 @@ class RoundsViewSet(APIView):
         ronda = rounds[qp - 1].find_all('li')
         obj = []
 
+
         for r in ronda:
-            spans = r.findChildren('span')
+            data = r.findChildren('span')
+            sigla = r.findChildren('span', attrs={'class': 'time-sigla'})
             divs = r.findChildren('div')[0].findChildren('div')
+            try:
+                local = data[3].text.split('\r\n')[1].strip()
+            except:
+                local = ''
             obj.append({
+                'data': data[0].text.split('\r\n')[1].strip(),
+                'local': local.split('\n')[0],
                 'home': {
-                    'nick': spans[1].text,
+                    'nick': sigla[0].text,
                     'img': divs[1].img['src']
                 },
                 'away': {
-                    'nick': spans[2].text,
+                    'nick': sigla[1].text,
                     'img': divs[2].img['src']
                 }
             })
