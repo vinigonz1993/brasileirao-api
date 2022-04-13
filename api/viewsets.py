@@ -19,16 +19,17 @@ class TeamsViewSet(APIView):
 
         for l in linhas:
             filhas = l.findChildren('td')
+            pontuacao = l.findChildren('th')
             text = (filhas[0].text).replace('\n', '')
             pos = text.split('º')
             name = pos[1].split(' -')[0]
             obj.append({
                 'name': name.replace('0', ''),
                 'pos': pos[0],
-                'pts': filhas[1].text,
-                'v': filhas[1].text,
-                'e': filhas[2].text,
-                'd': filhas[3].text,
+                'pts': pontuacao[0].text,
+                'v': filhas[2].text,
+                'e': filhas[3].text,
+                'd': filhas[4].text,
                 'img': filhas[0].img['src']
             })
 
