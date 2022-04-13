@@ -70,16 +70,31 @@ class RoundsViewSet(APIView):
 
 
         for r in ronda:
-            data = r.findChildren('span')
             sigla = r.findChildren('span', attrs={'class': 'time-sigla'})
             divs = r.findChildren('div')[0].findChildren('div')
+            desc = r.findChildren('span', attrs={'class': 'partida-desc'})
             try:
-                local = data[3].text.split('\r\n')[1].strip()
+                descricao = {
+                    'data': desc[0].text.split('\r\n')[1].strip(),
+                    'local': desc[1].text.split('\r\n')[1].strip().split('\n')[0].strip()
+                }
             except:
-                local = ''
+                descricao = {
+                    'data': 'Sem definição',
+                    'local': 'Sem definição'
+                }
+
+            try:
+                placar = r.findChildren(
+                    'strong', attrs={'class': 'partida-horario'}
+                )[0].text.split('\r\n')[0].strip().replace('\n', '')
+                if not placar:
+                    placar = '- x -'
+            except:
+                placar = '- x -'
             obj.append({
-                'data': data[0].text.split('\r\n')[1].strip(),
-                'local': local.split('\n')[0],
+                'data': descricao['data'] if descricao else 'Sem definição',
+                'local': descricao['local'] if descricao else 'Sem definição',
                 'home': {
                     'nick': sigla[0].text,
                     'img': divs[1].img['src']
@@ -87,7 +102,8 @@ class RoundsViewSet(APIView):
                 'away': {
                     'nick': sigla[1].text,
                     'img': divs[2].img['src']
-                }
+                },
+                'score': placar
             })
 
 
